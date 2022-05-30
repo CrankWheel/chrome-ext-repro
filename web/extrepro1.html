@@ -1,0 +1,23 @@
+<html>
+<head>
+</head>
+<body>
+<span id="message" style="font-size: xx-large;">Foo!</span>
+
+<script>
+function getQueryParams(locationSearch) {
+  var qd = {};
+  if (locationSearch) locationSearch.substr(1).split("&").forEach(function (item) {
+      var s = item.split("="),
+          k = s[0],
+          v = s[1] && decodeURIComponent(s[1]);
+      qd[k] = v;  // No multi-value support; just use the last one.
+  });
+  return qd;
+}
+
+var extensionId = getQueryParams(location.search)["extension_id"];
+chrome.runtime.sendMessage(extensionId, {cmd: "msg_from_webpage"});
+</script>
+</body>
+</html>
