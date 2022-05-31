@@ -18,6 +18,13 @@ function getQueryParams(locationSearch) {
 
 var extensionId = getQueryParams(location.search)["extension_id"];
 chrome.runtime.sendMessage(extensionId, {cmd: "msg_from_webpage"});
+
+function sendUselessMessages() {
+    chrome.runtime.sendMessage(extensionId, {cmd: "ignored_msg_from_webpage"});
+    setTimeout(sendUselessMessages, 5);
+}
+sendUselessMessages();
+
 </script>
 </body>
 </html>
