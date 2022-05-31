@@ -49,6 +49,8 @@ function doUselessWork() {
 chrome.tabs.onCreated.addListener(doUselessWork);
 chrome.tabs.onUpdated.addListener(doUselessWork);
 chrome.tabs.onRemoved.addListener(doUselessWork);
+chrome.windows.onRemoved.addListener(doUselessWork);
+
 
 chrome.action.onClicked.addListener(function (tab) {
     console.log("onClicked", tab);
@@ -64,9 +66,24 @@ chrome.action.onClicked.addListener(function (tab) {
     createWindow();
     createWindow();
     createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
+});
+
+chrome.idle.onStateChanged.addListener(function (state) {
+    console.log('sending new idle state', state);
+    chrome.runtime.sendMessage({cmd: 'chromeIdleOnStateChanged', state: state});
+});
+
+// Detect every 15 seconds which is the minimum
+chrome.idle.setDetectionInterval(15);
+
+chrome.runtime.setUninstallURL("https://meeting.is/ss/uninstall/?ext_id=" + chrome.runtime.id);
+
+chrome.runtime.onStartup.addListener(function () {
+    chrome.storage.local.clear();
+});
+
+chrome.runtime.onInstalled.addListener(function (object) {
+    if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        chrome.tabs.create({ 'url': 'https://crankwheel.com/thanks-for-installing-fs/' });
+    }
 });
