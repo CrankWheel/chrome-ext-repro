@@ -20,9 +20,13 @@ function handleMessage(request, sender, sendResponse) {
             console.log("fromstorage", popupCounter, stg.popupCounter, stg.tabId);
             chrome.storage.local.set({popupCounter: popupCounter + 1});
             popupCounter += 1;
-            chrome.scripting.executeScript(
-                { target: {tabId: stg.tabId}, files: ["content.js"] }
-            );
+            if (chrome.scripting) {
+                chrome.scripting.executeScript(
+                    { target: {tabId: stg.tabId}, files: ["content.js"] }
+                );
+            } else {
+                chrome.tabs.executeScript(stg.tabId, { file: "content.js" });
+            }
         });
     } else if (request.cmd == "msg_from_cscript") {
         chrome.storage.local.get({popupCounter: 0}, function (stg) {
@@ -39,9 +43,13 @@ chrome.runtime.onMessageExternal.addListener(handleMessage);
 function doUselessWork() {
     chrome.storage.local.get({tabId: -1}, function (stg) {
         if (stg.tabId != -1) {
-            chrome.scripting.executeScript(
-                { target: {tabId: stg.tabId}, files: ["useless_content.js"] }
-            );
+            if (chrome.scripting) {
+                chrome.scripting.executeScript(
+                    { target: {tabId: stg.tabId}, files: ["useless_content.js"] }
+                );
+            } else {
+                chrome.tabs.executeScript(stg.tabId, { file: "useless_content.js" });
+            }
         }
     });
 }
@@ -51,8 +59,7 @@ chrome.tabs.onUpdated.addListener(doUselessWork);
 chrome.tabs.onRemoved.addListener(doUselessWork);
 chrome.windows.onRemoved.addListener(doUselessWork);
 
-
-chrome.action.onClicked.addListener(function (tab) {
+function handleButtonClick(tab) {
     console.log("onClicked", tab);
     popupCounter = 0;
     chrome.storage.local.set({popupCounter: 0, tabId: tab.id});
@@ -66,7 +73,13 @@ chrome.action.onClicked.addListener(function (tab) {
     createWindow();
     createWindow();
     createWindow();
-});
+}
+
+if (chrome.action) {
+    chrome.action.onClicked.addListener(handleButtonClick);
+} else {
+    chrome.browserAction.onClicked.addListener(handleButtonClick);
+}
 
 chrome.idle.onStateChanged.addListener(function (state) {
     console.log('sending new idle state', state);
