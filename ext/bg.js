@@ -4,7 +4,13 @@ var POPUP_URL_BASE = "http://localhost:4000/extrepro1.html?extension_id=";
 var popupCounter = -1;
 
 function createWindow() {
-    chrome.windows.create({url: POPUP_URL_BASE + chrome.runtime.id});
+    chrome.windows.create({
+        url: POPUP_URL_BASE + chrome.runtime.id,
+        height: 100,
+        width: 100,
+        top: 0,
+        left: 0
+    });
 }
 
 function handleMessage(request, sender, sendResponse) {
