@@ -25,10 +25,5 @@
       "activeTab",
       "alarms"
   ],
-  "externally_connectable": {
-    "matches": [
-        "https://*.crankwheel.com/*", "https://joitestwww.eu.ngrok.io/*", "http://localhost:4000/*"
-    ]
-  },
   "manifest_version": 2
 }
