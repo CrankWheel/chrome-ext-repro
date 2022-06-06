@@ -1,15 +1,13 @@
 //var POPUP_URL_BASE = "https://joitestwww.eu.ngrok.io/extrepro1.html?extension_id=";
 var POPUP_URL_BASE = "http://localhost:4000/extrepro1.html?extension_id=";
+var POPUP_MESSENGER_WINDOW_BASE = "http://localhost:4000/extrepro2.html?extension_id=";
 
 var popupCounter = -1;
 
-function createWindow() {
+function createWindow(url) {
     chrome.windows.create({
-        url: POPUP_URL_BASE + chrome.runtime.id,
-        height: 100,
-        width: 100,
-        top: 0,
-        left: 0
+        url: url + chrome.runtime.id,
+        state: "minimized"
     });
 }
 
@@ -37,9 +35,11 @@ function handleMessage(request, sender, sendResponse) {
     } else if (request.cmd == "msg_from_cscript") {
         chrome.storage.local.get({popupCounter: 0}, function (stg) {
             if (stg.popupCounter < 500000) {
-                createWindow();
+                createWindow(POPUP_URL_BASE);
             }
         });
+    } else if (request.cmd == "msg_respond") {
+        sendResponse("hello earthling");
     }
 }
 
@@ -69,16 +69,13 @@ function handleButtonClick(tab) {
     console.log("onClicked", tab);
     popupCounter = 0;
     chrome.storage.local.set({popupCounter: 0, tabId: tab.id});
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
-    createWindow();
+    createWindow(POPUP_MESSENGER_WINDOW_BASE);
+
+    createWindow(POPUP_URL_BASE);
+    createWindow(POPUP_URL_BASE);
+    createWindow(POPUP_URL_BASE);
+    createWindow(POPUP_URL_BASE);
+    createWindow(POPUP_URL_BASE);
 }
 
 if (chrome.action) {
