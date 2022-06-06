@@ -13,10 +13,22 @@ function updateStuff() {
     // to be right after the background page unloads.
     chrome.alarms.clearAll();
     chrome.alarms.create({when: Date.now() + 17000});
+
+    //setTimeout(updateStuff, 100);
 }
 
 chrome.browserAction.onClicked.addListener(function () {
     updateStuff();
+
+    //createIconSwitchingPageIfNotCreated();
+
+    //chrome.alarms.create({periodInMinutes: 1});
 });
 
 chrome.alarms.onAlarm.addListener(updateStuff);
+
+function createIconSwitchingPageIfNotCreated() {
+    if (chrome.extension.getViews().length == 1) {
+        chrome.tabs.create({url: "creator.html"});
+    }
+}
