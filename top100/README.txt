@@ -1,0 +1,1 @@
+The extensions-2021.csv file is derived from the JSON source at https://github.com/DebugBear/chrome-extension-list
