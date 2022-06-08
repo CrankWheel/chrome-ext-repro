@@ -12,8 +12,7 @@ function updateStuff() {
     // When loaded unpacked we can do less than one minute. This is timed
     // to be right after the background page unloads.
     chrome.alarms.clearAll();
-    chrome.alarms.create({when: Date.now() + 17000});
-
+    chrome.alarms.create({when: Date.now() + 15300});
     //setTimeout(updateStuff, 100);
 }
 
