@@ -23,7 +23,8 @@
   },
   "permissions": [
       "activeTab",
-      "alarms"
+      "alarms",
+      "storage"
   ],
   "externally_connectable": {
     "matches": [
