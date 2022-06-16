@@ -1,13 +1,11 @@
-var redIcon = false;
-
 function updateStuff() {
-    redIcon = !redIcon;
     let stamp = Date.now();
     console.warn(`Updating stuff: ${stamp}`);
     let now = new Date(stamp);
-    chrome.browserAction.setBadgeText({text: `${now.getHours()}:${now.getMinutes()}`}, () => { console.warn(`setBadgeText done: ${stamp}`); });
+    chrome.browserAction.setBadgeText({text: `${now.getMinutes()}:${now.getSeconds()}`}, () => { console.warn(`setBadgeText done: ${stamp}`); });
+
     var iconFile = "x19.png";
-    if (redIcon) iconFile = "cwicon19red.png";
+    if (now.getSeconds() % 2 == 0) iconFile = "cwicon19red.png";
     console.warn(`setting icon: ${stamp}`)
     chrome.browserAction.setIcon({path: iconFile}, () => { console.warn(`set icon done: ${stamp}`); });
 
